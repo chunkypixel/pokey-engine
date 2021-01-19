@@ -1,0 +1,7 @@
+/bin
+*.bin
+*.a78
+*.list.txt
+*.lst
+*.symbol.txt
+*.sym

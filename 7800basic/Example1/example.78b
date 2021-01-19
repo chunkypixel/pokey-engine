@@ -1,0 +1,152 @@
+ set pokeysupport on
+ set doublewide off
+ set tv ntsc
+ set zoneheight 8
+ set screenheight 208
+ set romsize 48k
+ set mcpdevcart off
+ set canary off
+ displaymode 160A
+
+ rem configure POKEY/Music
+ dim POKEYADR = $450
+ dim TUNEAREA = $2200
+ dim SOUNDZP = y.z
+ rem vars
+ dim tuneId = c
+ dim value = f
+ dim controllerState = g
+ dim controller_debounce_bit0 = g
+ 
+ rem tunes
+ const POKEY_ATARITODAY = 0
+ const POKEY_GAMECOMPLETE = 1
+ const POKEY_LEVEL1 = 2
+ const POKEY_SKULL = 3
+ const POKEY_TOTALTUNES = 4
+
+ rem characters
+ incgraphic gfx/font.png 160A
+
+ rem font
+ characterset font
+ alphachars '0123456789abcdefghijklmnopqrstuvwxyz! >`?/.,:-_()[]&AB@*"#'
+
+Start
+ BACKGRND=$00 
+ rem palette
+ if !paldetected then P0C1=$0f : P1C1=$34 : P2C1=$1e : P3C1=$3a : P4C1=$88
+ if paldetected then P0C1=$0f : P1C1=$44 : P2C1=$2e : P3C1=$4a : P4C1=$98
+
+ rem display
+ gosub InitialiseScreen
+ ;temp1 = PLAYPOKEYSFX(POKEY_ATARITODAY)
+
+MainLoop
+ rem check keys
+ if controller_debounce_bit0{0} then goto _mainLoopSkipUpdateControls
+
+ rem play tune/sfx
+ if joy0fire1 then controller_debounce_bit0{0} = 1 : gosub PlayPokeySound : goto _mainLoopSkipUpdateControls
+ if joy0fire0 then controller_debounce_bit0{0} = 1 : gosub StopAllSounds
+
+ rem change tune
+ if joy0left && tuneId > 0 then tuneId = tuneId-1 : controller_debounce_bit0{0} = 1 
+ if joy0right && tuneId < POKEY_TOTALTUNES-1 then tuneId = tuneId+1 : controller_debounce_bit0{0} = 1
+
+_mainLoopSkipUpdateControls
+ rem reset?
+ if !joy0any && !joy0fire1 then controller_debounce_bit0{0} = 0
+
+ rem render
+ restorescreen
+
+ rem NAME OF TUNE
+ if tuneId = POKEY_ATARITODAY then plotchars 'have you played atari today? *' 0 12 4
+ if tuneId = POKEY_GAMECOMPLETE then plotchars 'game complete (millie & molly) *' 0 12 4
+ if tuneId = POKEY_LEVEL1 then plotchars 'level 1 (popeye) *' 0 12 4
+ if tuneId = POKEY_SKULL then plotchars 'skull sfx [overlay] (popeye)' 0 12 4
+
+ rem update vars
+ plotvalue font 0 TUNCTL 2 100 7
+ plotvalue font 0 TUNINDEX 2 100 8
+ plotvalue font 0 TUNFRM 2 100 9
+ plotvalue font 0 TUNPRIOR 2 100 10
+ plotvalue font 0 CTLSAV 2 100 11
+ plotvalue font 0 CTLVOL 2 100 12
+ plotvalue font 0 NOTELO 2 100 13
+ plotvalue font 0 NOTEHI 2 100 14
+ plotvalue font 0 DURNLO 2 100 15
+ plotvalue font 0 DURNHI 2 100 16 
+ plotvalue font 0 DCYSTOR 2 100 17
+ plotvalue font 0 FREQCNT 2 100 18 
+ plotvalue font 0 PALCNT 2 100 19
+ value = SOUNDZP[0] : plotvalue font 0 value 2 100 20
+ value = SOUNDZP[1] : plotvalue font 0 value 2 108 20
+
+ drawscreen
+
+ rem continue
+ goto MainLoop
+
+InitialiseScreen
+ clearscreen
+
+ rem titles
+ plotchars 'pokey sample' 2 12 0
+ plotchars 'tunes by synthpopalooza' 3 12 1
+
+ rem tune
+ plotchars 'tune/sfx' 4 12 3
+
+ rem pokey vars
+ plotchars 'tunctl' 3 12 7
+ plotchars 'tunindex' 3 12 8
+ plotchars 'tunfrm' 3 12 9
+ plotchars 'tunprior' 3 12 10
+ plotchars 'ctlsav' 3 12 11
+ plotchars 'ctlvol' 3 12 12
+ plotchars 'notelo' 3 12 13
+ plotchars 'notehi' 3 12 14
+ plotchars 'durnlo' 3 12 15
+ plotchars 'durnhi' 3 12 16 
+ plotchars 'dcystor' 3 12 17 
+ plotchars 'freqcnt' 3 12 18
+ plotchars 'palcnt' 3 12 19
+ plotchars 'soundzp' 3 12 20
+
+ rem message
+ plotchars '* reset all channels' 0 12 23
+ plotchars 'fire 1 start/2 stop all' 0 12 24
+ plotchars 'left or right to change tune/sfx' 0 12 25
+ savescreen
+ return
+
+ rem --------------------------------------------------------------------------
+ rem TOPSCREEENROUTINE
+ rem note: using this alleviates having to include the std_routine.bin
+ rem --------------------------------------------------------------------------
+topscreenroutine
+  rem call the pokey servicing routine
+  asm
+    jsr SERVICEPOKEYSFX
+end
+ return
+
+ rem --------------------------------------------------------------------------
+ rem POKEY
+ rem --------------------------------------------------------------------------
+PlayPokeySound
+ rem validate
+ if pokeydetected then temp1 = PLAYPOKEYSFX(tuneId)
+ return
+
+StopAllSounds
+ if pokeydetected then temp1 = STOPPOKEYSFX()
+ return
+
+ rem --------------------------------------------------------------------------
+ rem ASSEMBLY
+ rem --------------------------------------------------------------------------
+ inline pokeyconfig.asm
+ inline pokeymusic.asm
