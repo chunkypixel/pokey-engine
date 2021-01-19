@@ -39,7 +39,7 @@ The engine itself is reasonably straight forward to integrate into 7800basic and
 
 * copy file **pokeysound.asm** into the base root folder of your game. 7800basic will automagically replace the base file in 7800basic during compilation
 * inline **pokeyconfig.asm** into your game source (this should be the end of the last shared bank so it can be accessed at all times)
-* inline your **musicxxx.asm** file(s) into your game source. There can be one of more of these spread across multiple banks depending on how you game is structured but in reality as with bank sharing the tune data MUST be available to be currently active bank.
+* inline your **musicxxx.asm** file(s) into your game source. There can be one of more of these files spread across multiple banks depending on how you game is structured but in reality as with bank sharing the tune data MUST be available to be currently active bank.
 
 ### Other changes to your source
 The following changes are required to be made to your 7800basic source:
