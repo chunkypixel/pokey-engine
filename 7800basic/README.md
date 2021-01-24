@@ -19,9 +19,10 @@ The following people have contributed to the pokey engine:
 ## 7800basic release
 > The 7800basic version contains initialisation and base framework code provide by Mike Saarna from the 7800basic project. 
 
-### v1.00 (19 Jan 2021)
+### v1.01 (24 Jan 2021)
 #### Changelog
-* v1.00 - open sourced to Github 
+* v1.01 - updated SKIPCHECKFORPOKEY process to better handle $450 detection (playsoft)
+* v1.00 - open sourced to Github (mksmith)
 * v0.11 - added queue scheduling (playsoft) and SKIPCHECKFORPOKEY flag Concerto issue). Added RESETPOLYON and CHANNLRESETON table flags (mksmith)
 * v0.10 - removed number of channels (not required) and added a tune-by-tune reset table (mksmith)
 * v0.9  - removed SKCTL set and added ability to set number of channels to activate (mksmith)
