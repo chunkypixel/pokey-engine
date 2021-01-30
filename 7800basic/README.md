@@ -7,7 +7,7 @@ The 7800 pokey engine has been kindly open-sourced by the contributors and is fr
 The source is currently maintained by Matthew Smith (mksmith).
 
 ## Contributors
-The following people have contributed to the pokey engine:
+The following people have contributed to developing the pokey engine:
 
 * Perry Thuente (tep392)
 * Bob DeCrescenzo (pacmanplus)
@@ -16,11 +16,26 @@ The following people have contributed to the pokey engine:
 * Matthew Smith (mksmith) 
 * Paul Lay (playsoft)
 
+## Addtional testing
+The following people have contributed to testing the pokey engine:
+
+* Robert Tuccitto (trebor) 
+
 ## 7800basic release
 > The 7800basic version contains initialisation and base framework code provide by Mike Saarna from the 7800basic project. 
 
-### v1.01 (24 Jan 2021)
+## Compiling for the Concerto Beta
+When compiling builds for use on the Concerto beta there are a couple of things you need to be aware of:
+* Enable the SKIPINITFORCONCERTO flag in **pokeysound.asm**
+* 144k ROM is the best supported ROM size and should work without additional change
+* 128K+RAM ROM will work but the ROM header will need to be manually changed to remove the pokey @ $450 flag
+* 128K ROM does not produce any pokey sound
+
+> These notes will be updated as batari makes enhancements and changes to the Concerto firmware.
+
+### v1.02 (30 Jan 2021)
 #### Changelog
+* v1.02 - renamed SKIPCHECKFORPOKEY to SKIPINITFORCONCERTO and verified changes work (mksmith, trebor)
 * v1.01 - updated SKIPCHECKFORPOKEY process to better handle $450 detection (playsoft)
 * v1.00 - open sourced to Github (mksmith)
 * v0.11 - added queue scheduling (playsoft) and SKIPCHECKFORPOKEY flag Concerto issue). Added RESETPOLYON and CHANNLRESETON table flags (mksmith)

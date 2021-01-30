@@ -22,9 +22,11 @@
 ; ADDITIONAL CODING:
 ; - 7800basic POKEY base pokeysound.asm code (reveng)
 ; - Original 7800basic integration (mksmith)
+; ADDITIONAL TESTING:
+; - Robert Tuccitto (trebor)
 ;-------------------------------------------------------------------------------
 ; CHANGELOG:
-; v1.02 - ranamed SKIPCHECKFORPOKEY to SKIPINITFORCONCERTO (mksmith)
+; v1.02 - renamed SKIPCHECKFORPOKEY to SKIPINITFORCONCERTO and verified changes work (mksmith, trebor)
 ; v1.01 - updated SKIPCHECKFORPOKEY process to better handle $450 detection (playsoft)
 ; v1.00 - open sourced to Github (mksmith)
 ; v0.11 - added queue scheduling (playsoft) and SKIPCHECKFORPOKEY flag (Concerto issue)
@@ -52,6 +54,8 @@
 ; - refer to example.78b for how you can fully implement this process
 ; ADDTIONAL NOTES:
 ; - tunes can be moved into RAM and played from there as required
+; COMPILING FOR THE CONCERTO BETA
+; - enable the SKIPINITFORCONCERTO flag
 ; -------------------------------------------------------------------------------
 ; 7800basic:
 ;
