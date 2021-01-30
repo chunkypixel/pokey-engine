@@ -1,6 +1,6 @@
 ;-------------------------------------------------------------------------------
 ; POKEY ENGINE for 7800basic
-; v1.01 (24 Jan 2021)
+; v1.02 (30 Jan 2021)
 ;
 ; Welcome to the 7800 pokey engine for music and sound effects playback on the Atari 
 ; 7800 Console. This engine was initially developed (based on the disassembly and 
@@ -24,6 +24,7 @@
 ; - Original 7800basic integration (mksmith)
 ;-------------------------------------------------------------------------------
 ; CHANGELOG:
+; v1.02 - ranamed SKIPCHECKFORPOKEY to SKIPINITFORCONCERTO (mksmith)
 ; v1.01 - updated SKIPCHECKFORPOKEY process to better handle $450 detection (playsoft)
 ; v1.00 - open sourced to Github (mksmith)
 ; v0.11 - added queue scheduling (playsoft) and SKIPCHECKFORPOKEY flag (Concerto issue)
@@ -112,7 +113,7 @@ POKEY_TEMP2     EQU POKEY_TEMP1+1           ;1 BYTE
 
 ;    COMPILE FLAGS
 ; REM out to exclude
-SKIPCHECKFORPOKEY = 1                      ;Skip 7800basic CheckForPokey process (Concerto beta)
+;SKIPINITFORCONCERTO = 1                     ;Skip 7800basic CheckForPokey process (Concerto beta)
 MUTEMASKON = 1                              ;Use the advanced MUTEMASK state
 RESETPOLYON = 1                             ;Use the advanced RESETPOLY state
 CHANNLRESETON = 1                           ;Use the CHANNLRESET table to identify whether a tune resets all channels on playback
@@ -572,7 +573,7 @@ checkforpokey
          ldy #$0f
          lda #$00
          sta pokeydetected          ; start off by assuming pokey will be detected
- ifconst SKIPCHECKFORPOKEY
+ ifconst SKIPINITFORCONCERTO
          cpx #$00                   ; last loop in detectpokeylocation?
          beq manualpokeyinit        ; yes, then detect and init POKEY
          dec pokeydetected          ; otherwise not detected

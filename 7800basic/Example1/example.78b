@@ -3,7 +3,8 @@
  set tv ntsc
  set zoneheight 8
  set screenheight 208
- set romsize 48k
+ ;set romsize 128k
+ set romsize 144k
  set mcpdevcart off
  set canary off
  displaymode 160A
@@ -24,9 +25,6 @@
  const POKEY_LEVEL1 = 2
  const POKEY_SKULL = 3
  const POKEY_TOTALTUNES = 4
-
- rem characters
- incgraphic gfx/font.png 160A
 
  rem font
  characterset font
@@ -121,6 +119,12 @@ InitialiseScreen
  plotchars 'left or right to change tune/sfx' 0 12 25
  savescreen
  return
+
+ ;bank 8 ;128k
+ bank 9 ;144k
+
+ rem characters
+ incgraphic gfx/font.png 160A
 
  rem --------------------------------------------------------------------------
  rem TOPSCREEENROUTINE
