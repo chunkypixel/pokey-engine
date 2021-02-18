@@ -66,6 +66,7 @@ _mainLoopSkipUpdateControls
  if tuneId = POKEY_SKULL then plotchars 'skull sfx [overlay] (popeye)' 0 12 4
 
  rem update vars
+ plotvalue font 0 SKCTLSSAV 2 100 6
  plotvalue font 0 TUNCTL 2 100 7
  plotvalue font 0 TUNINDEX 2 100 8
  plotvalue font 0 TUNFRM 2 100 9
@@ -98,6 +99,7 @@ InitialiseScreen
  plotchars 'tune/sfx' 4 12 3
 
  rem pokey vars
+ plotchars 'skctls' 3 12 6
  plotchars 'tunctl' 3 12 7
  plotchars 'tunindex' 3 12 8
  plotchars 'tunfrm' 3 12 9

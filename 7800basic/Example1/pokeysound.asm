@@ -1,6 +1,6 @@
 ;-------------------------------------------------------------------------------
 ; POKEY ENGINE for 7800basic
-; v1.02 (30 Jan 2021)
+; v1.03 (18 Feb 2021)
 ;
 ; Welcome to the 7800 pokey engine for music and sound effects playback on the Atari 
 ; 7800 Console. This engine was initially developed (based on the disassembly and 
@@ -26,6 +26,7 @@
 ; - Robert Tuccitto (trebor)
 ;-------------------------------------------------------------------------------
 ; CHANGELOG:
+; v1.03 - re-implemented CHANNLSKCTLS lookup (mksmith) 
 ; v1.02 - renamed SKIPCHECKFORPOKEY to SKIPINITFORCONCERTO and verified changes work (mksmith, trebor)
 ; v1.01 - updated SKIPCHECKFORPOKEY process to better handle $450 detection (playsoft)
 ; v1.00 - open sourced to Github (mksmith)
@@ -107,8 +108,9 @@ DCYSTOR         EQU TUNEAREA+$002A          ;4 BYTES - FOR NOTE DECAY BY CHANNEL
 FREQCNT         EQU TUNEAREA+$002E          ;4 BYTES - FOR NOTE DECAY BY CHANNEL
 CTLSAV          EQU TUNEAREA+$0032          ;4 BYTES - TO SAVE THE CONTROL VALUE
 MUTEMASK        EQU TUNEAREA+$0036          ;4 BYTES - FLAG FOR MUTEMASK
+SKCTLSSAV       EQU TUNEAREA+$003A          ;1 BYTE  - TO SAVE SKCTLS VALUE
 
-REQUEST_QUEUE   EQU TUNEAREA+$003A          ;8 BYTES - POKEY sfx queue
+REQUEST_QUEUE   EQU SKCTLSSAV+1             ;8 BYTES - POKEY sfx queue
 IN_INDEX        EQU REQUEST_QUEUE+8         ;1 BYTE
 OUT_INDEX       EQU IN_INDEX+1              ;1 BYTE
 
@@ -168,7 +170,8 @@ INITPROCESSPOKEYSFXREQUEST
     LDA CHANNLMDETBL,Y                      ; 16-bit mode on channels 0 and 1
     STA TUNCTL                              ; store (to use in resetpoly)
     STA POAUDCTL
-    LDA #$03                                ; two-tone mode
+    LDA CHANNLSKCTLS,Y                      ; two-tone mode
+    STA SKCTLSSAV                           ; save for later use
     STA SKCTLS
     LDA #$06                                ; reset pal repeat counter
     STA PALCNT
@@ -524,7 +527,7 @@ RESETPOLY
     NOP ; 2 cycles
     STA STIMER ; 4 cycles
     ; finish resetting
-    LDA #$03 ; 2 cycles
+    LDA SKCTLSSAV ; 2 cycles
     STA SKCTLS ; 4 cycles
  endif
     RTS
@@ -654,3 +657,4 @@ pokeysoundmoduleend
  echo "  custom pokeysound assembly: ",[(pokeysoundmoduleend-pokeysoundmodulestart)]d," bytes"
 
  endif
+ 

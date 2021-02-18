@@ -13,6 +13,12 @@ CHANNLMDETBL:
     .byte #$71						;GameComplete (Millie & Molly)
     .byte #$29                      ;Level1 (Popeye)
     .byte #$29                      ;Skull (Popeye)
+;   CHANNLSKCTLS TABLE
+CHANNLSKCTLS
+    .byte #$03                      ;AtariToday
+    .byte #$03                      ;GameComplete (Millie & Molly)
+    .byte #$03                      ;Level1 (Popeye)
+    .byte #$03                      ;Skull (Popeye)
 ;   CHANNLRESET TABLE (1-reset channels,0-skip[ie. sfx overlay background tune]) 
 CHANNLRESET:
     .byte #$01                      ;AtariToday
