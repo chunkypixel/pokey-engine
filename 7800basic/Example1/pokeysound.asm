@@ -62,7 +62,7 @@
 ;
 ; 1. Add the following vars into your 7800basic source:
 ; dim POKEYADR = $450   ;$450 (modern homebrew) or $4000
-; dim TUNEAREA = $2200  ;range $2200-$2246             
+; dim TUNEAREA = $2200  ;range $2200-$2247        
 ; dim SOUNDZP =  y.z    ;all pointers must be located in zeropage
 ; Note: The TUNEAREA location or SOUNDZP vars can be changed to suit your requirements.
 ;

@@ -10,9 +10,10 @@
  displaymode 160A
 
  rem configure POKEY/Music
- dim POKEYADR = $450
- dim TUNEAREA = $2200
- dim SOUNDZP = y.z
+ dim POKEYADR = $450   ;$450 (modern homebrew) or $4000
+ dim TUNEAREA = $2200  ;range $2200-$2247        
+ dim SOUNDZP =  y.z    ;all pointers must be located in zeropage
+ 
  rem vars
  dim tuneId = c
  dim value = f
