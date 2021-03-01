@@ -22,7 +22,7 @@ The following titles are using variants of the pokey engine:
 * Pac-man Collection (pacmanplus)
 * Millie & Molly 7800 and Arkanoid (mksmith)
 * Popeye (darryl1970)
-* Danger Zone (muddyfunster) 
+* Danger Zone, EXO (muddyfunster) 
 
 > Please contact Matthew Smith (mksmith) via the AtariAge forum to add your title to the list.
 
