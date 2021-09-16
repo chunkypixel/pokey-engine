@@ -25,16 +25,27 @@ The following people have contributed to testing the pokey engine:
 > The 7800basic version contains initialisation and base framework code provide by Mike Saarna from the 7800basic project. 
 
 ## Compiling for the Concerto Beta
-When compiling builds for use on the Concerto beta there are a couple of things you need to be aware of:
-* Enable the SKIPINITFORCONCERTO flag in **pokeysound.asm**
-* 144k ROM is the best supported ROM size and should work without additional change
-* 128K+RAM ROM will work but the ROM header will need to be manually changed to remove the pokey @ $450 flag
-* 128K ROM does not produce any pokey sound
+Enable the SKIPINITFORCONCERTO flag
+Update the a78 header by removing the pokey@450 reference using the 
+7800header tool. To edit
+ - open the .a78 file with 7800header:
+      7800header example.78b.a78
+ - type 'unset pokey@450'
+ - type 'save'
+ - exit
+NOTE: manually changing the compiled binary as follows replicates using the SKIPINITFORCONCERTO. To edit:
+  - view the .a78 with a hex editor
+  - find this string: A0 0F A9 00 8D 08 21 91 4B
+  - replace "91" with "60"
+  - save 
+Thanks to Fred Quimby
 
 > These notes will be updated as batari makes enhancements and changes to the Concerto firmware.
 
-### v1.02 (30 Jan 2021)
+### v1.04 (15 Sep 2021)
 #### Changelog
+* v1.04 - updated information for customizing a build for the concerto beta
+* v1.03 - re-implemented CHANNLSKCTLS lookup (mksmith) 
 * v1.02 - renamed SKIPCHECKFORPOKEY to SKIPINITFORCONCERTO and verified changes work (mksmith, trebor)
 * v1.01 - updated SKIPCHECKFORPOKEY process to better handle $450 detection (playsoft)
 * v1.00 - open sourced to Github (mksmith)
@@ -63,7 +74,7 @@ The following changes are required to be made to your 7800basic source:
 1. Insert the following vars:
 ~~~~ 
  dim POKEYADR = $450   ;$450 (modern homebrew) or $4000
- dim TUNEAREA = $2200  ;range $2200-$2246 (46 bytes)            
+ dim TUNEAREA = $2200  ;71 bytes        
  dim SOUNDZP = y.z     ;all pointers must be located in zeropage
 ~~~~ 
 > Note: The TUNEAREA location or SOUNDZP vars can be changed to suit your requirements.
@@ -79,7 +90,7 @@ return
 ~~~~ 
 
 #### Examples
-* example1.78b - basic implementation showing how to integrate the 7800 pokey engine into 7800basic including adding pokeyconfig and pokeymusic assembly files via the inline feature, calling and playing multiple different tunes and sound effects.
+* example1/example.78b - basic implementation showing how to integrate the 7800 pokey engine into 7800basic including adding pokeyconfig and pokeymusic assembly files via the inline feature, calling and playing multiple different tunes and sound effects.
 
 #### Additional notes
 * tunes can be moved into RAM and played from there if required (example coming soon)
