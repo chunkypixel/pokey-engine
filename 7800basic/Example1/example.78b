@@ -11,7 +11,7 @@
 
  rem configure POKEY/Music
  dim POKEYADR = $450   ;$450 (modern homebrew) or $4000
- dim TUNEAREA = $2200  ;range $2200-$2247        
+ dim TUNEAREA = $2200  ;71 bytes        
  dim SOUNDZP =  y.z    ;all pointers must be located in zeropage
  
  rem vars

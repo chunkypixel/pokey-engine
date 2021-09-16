@@ -1,6 +1,6 @@
 ;-------------------------------------------------------------------------------
 ; POKEY ENGINE for 7800basic
-; v1.03 (18 Feb 2021)
+; v1.04 (15 Sep 2021)
 ;
 ; Welcome to the 7800 pokey engine for music and sound effects playback on the Atari 
 ; 7800 Console. This engine was initially developed (based on the disassembly and 
@@ -26,6 +26,7 @@
 ; - Robert Tuccitto (trebor)
 ;-------------------------------------------------------------------------------
 ; CHANGELOG:
+; v1.04 - updated information for customizing a build for the concerto beta
 ; v1.03 - re-implemented CHANNLSKCTLS lookup (mksmith) 
 ; v1.02 - renamed SKIPCHECKFORPOKEY to SKIPINITFORCONCERTO and verified changes work (mksmith, trebor)
 ; v1.01 - updated SKIPCHECKFORPOKEY process to better handle $450 detection (playsoft)
@@ -55,14 +56,28 @@
 ; - refer to example.78b for how you can fully implement this process
 ; ADDTIONAL NOTES:
 ; - tunes can be moved into RAM and played from there as required
+;
 ; COMPILING FOR THE CONCERTO BETA
-; - enable the SKIPINITFORCONCERTO flag
+; - Enable the SKIPINITFORCONCERTO flag
+; - Update the a78 header by removing the pokey@450 reference using the 
+;   7800header tool. To edit
+;   - open the .a78 file with 7800header:
+;        7800header game.a78
+;   - type 'unset pokey@450'
+;   - type 'save'
+;   - exit
+; NOTE: manually changing the compiled binary as follows replicates using the SKIPINITFORCONCERTO. To edit:
+;   - view the .a78 with a hex editor
+;   - find this string: A0 0F A9 00 8D 08 21 91 4B
+;   - replace "91" with "60"
+;   - save 
+; Thanks to Fred Quimby
 ; -------------------------------------------------------------------------------
 ; 7800basic:
 ;
 ; 1. Add the following vars into your 7800basic source:
 ; dim POKEYADR = $450   ;$450 (modern homebrew) or $4000
-; dim TUNEAREA = $2200  ;range $2200-$2247        
+; dim TUNEAREA = $2200  ;71 bytes      
 ; dim SOUNDZP =  y.z    ;all pointers must be located in zeropage
 ; Note: The TUNEAREA location or SOUNDZP vars can be changed to suit your requirements.
 ;
@@ -119,7 +134,7 @@ POKEY_TEMP2     EQU POKEY_TEMP1+1           ;1 BYTE
 
 ;    COMPILE FLAGS
 ; REM out to exclude
-;SKIPINITFORCONCERTO = 1                     ;Skip 7800basic CheckForPokey process (Concerto beta)
+SKIPINITFORCONCERTO = 1                     ;Skip 7800basic CheckForPokey process (Concerto beta)
 MUTEMASKON = 1                              ;Use the advanced MUTEMASK state
 RESETPOLYON = 1                             ;Use the advanced RESETPOLY state
 CHANNLRESETON = 1                           ;Use the CHANNLRESET table to identify whether a tune resets all channels on playback
@@ -657,4 +672,3 @@ pokeysoundmoduleend
  echo "  custom pokeysound assembly: ",[(pokeysoundmoduleend-pokeysoundmodulestart)]d," bytes"
 
  endif
- 
