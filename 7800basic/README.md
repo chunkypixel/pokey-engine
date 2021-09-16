@@ -25,19 +25,19 @@ The following people have contributed to testing the pokey engine:
 > The 7800basic version contains initialisation and base framework code provide by Mike Saarna from the 7800basic project. 
 
 ## Compiling for the Concerto Beta
-Enable the SKIPINITFORCONCERTO flag
-Update the a78 header by removing the pokey@450 reference using the 
-7800header tool. To edit
- - open the .a78 file with 7800header:
+* Enable the SKIPINITFORCONCERTO flag
+* Update the a78 header by removing the pokey@450 reference using the 7800header tool. To edit
+ 1. open the .a78 file with 7800header:
       7800header example.78b.a78
- - type 'unset pokey@450'
- - type 'save'
- - exit
+ 2. type 'unset pokey@450'
+ 3. type 'save'
+ 4. exit
+
 NOTE: manually changing the compiled binary as follows replicates using the SKIPINITFORCONCERTO. To edit:
-  - view the .a78 with a hex editor
-  - find this string: A0 0F A9 00 8D 08 21 91 4B
-  - replace "91" with "60"
-  - save 
+ 1. view the .a78 with a hex editor
+ 2. find this string: A0 0F A9 00 8D 08 21 91 4B
+ 3. replace "91" with "60"
+ 4. save 
 Thanks to Fred Quimby
 
 > These notes will be updated as batari makes enhancements and changes to the Concerto firmware.
