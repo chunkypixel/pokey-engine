@@ -1,6 +1,6 @@
 ;-------------------------------------------------------------------------------
 ; POKEY ENGINE for 7800basic
-; v1.04 (15 Sep 2021)
+; v1.05 (1 Aug 2022)
 ;
 ; Welcome to the 7800 pokey engine for music and sound effects playback on the Atari 
 ; 7800 Console. This engine was initially developed (based on the disassembly and 
@@ -26,6 +26,7 @@
 ; - Robert Tuccitto (trebor)
 ;-------------------------------------------------------------------------------
 ; CHANGELOG:
+; v1.05 - udpated pokey detection routine from 7800basic 0.20 (reveng, mksmith)
 ; v1.04 - updated information for customizing a build for the concerto beta
 ; v1.03 - re-implemented CHANNLSKCTLS lookup (mksmith) 
 ; v1.02 - renamed SKIPCHECKFORPOKEY to SKIPINITFORCONCERTO and verified changes work (mksmith, trebor)
@@ -57,7 +58,7 @@
 ; ADDTIONAL NOTES:
 ; - tunes can be moved into RAM and played from there as required
 ;
-; COMPILING FOR THE CONCERTO BETA
+; COMPILING FOR THE CONCERTO BETA (for 128KRAM)
 ; - Enable the SKIPINITFORCONCERTO flag
 ; - Update the a78 header by removing the pokey@450 reference using the 
 ;   7800header tool. To edit
@@ -134,7 +135,7 @@ POKEY_TEMP2     EQU POKEY_TEMP1+1           ;1 BYTE
 
 ;    COMPILE FLAGS
 ; REM out to exclude
-SKIPINITFORCONCERTO = 1                     ;Skip 7800basic CheckForPokey process (Concerto beta)
+;SKIPINITFORCONCERTO = 1                     ;Skip 7800basic CheckForPokey process (Concerto beta)
 MUTEMASKON = 1                              ;Use the advanced MUTEMASK state
 RESETPOLYON = 1                             ;Use the advanced RESETPOLY state
 CHANNLRESETON = 1                           ;Use the CHANNLRESET table to identify whether a tune resets all channels on playback
@@ -557,7 +558,37 @@ schedulepokeysfx
          ; pokey detection routine. we check for pokey in the XBOARD/XM location,
          ; and the standard $4000 location.
          ; if pokey the pokey is present, this routine will reset it.
+ ifconst pokeyaddress
+detectpokeylocation
+     lda #<pokeyaddress
+     sta pokeybaselo
+     lda #>pokeyaddress
+     sta pokeybasehi
+     lda #$ff
+     sta pokeydetected
 
+ if pokeyaddress = $450
+     lda XCTRL1s
+     ora #%00010100
+     sta XCTRL1s
+     sta XCTRL1
+ endif
+
+     lda #0
+     ldy #15
+clearpokeyloop
+     sta (pokeybase),y
+     dey
+     bpl clearpokeyloop
+     ; take pokey out of reset...
+     ldy #PSKCTL
+     lda #3
+     sta (pokeybase),y
+     ldy #PAUDCTL
+     lda #0
+     sta (pokeybase),y
+     rts
+ else ; !pokeyaddress
 detectpokeylocation
          ;XBoard/XM...
          ldx #2

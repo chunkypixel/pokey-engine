@@ -1,5 +1,6 @@
 /bin
 *.bin
+*.versa
 *.a78
 *.CC2
 *.list.txt

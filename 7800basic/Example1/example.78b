@@ -1,9 +1,9 @@
- set pokeysupport on
+ set pokeysupport $450
  set doublewide off
  set tv ntsc
  set zoneheight 8
  set screenheight 208
- ;set romsize 128k
+ ;set romsize 128kRAM
  set romsize 144k
  set mcpdevcart off
  set canary off
